@@ -1,37 +1,49 @@
 #include <ESP32Servo.h>
-const int PWM_FREQ=4000;
-const int PWM_CHANNEL=1;
-const int PWM_RES=8;
-const int DC=32, TP= 18, SW= 34;
+const int DC=25, TP= 18, SW= 34;
 Servo Lata;
 bool TEMP = false, SWITCH = false;
+int aux=0;
 void setup() {
-ledcAttach(DC, PWM_FREQ, PWM_RES);
-Lata.attach(34, 0,180);
+Lata.attach(27);
+pinMode(DC,OUTPUT);
 Serial.begin(9600);
-pinMode(TP, INPUT);
-pinMode(SW, INPUT_PULLUP);
-
+pinMode(TP, INPUT_PULLUP);
+pinMode(SW, INPUT_PULLUP);      
 }
 
 void loop() {
+TEMP = digitalRead(TP);
+Serial.println(TEMP);
+SWITCH = digitalRead(SW);
+while(SWITCH == true){
+if(TEMP==true && aux == 0){
+TEMP=digitalRead(TP);
+Serial.println("Temperatura baixa");
+delay(500);
+SWITCH = digitalRead(SW);
+}
+else if(TEMP == false){
+  aux=1;
+  Lata.write(0);
+  TEMP=digitalRead(TP);
+  Serial.println("Alta");
+delay(500);
+SWITCH = digitalRead(SW);
+digitalWwrite(DC, HIGH);
+}
+else if(TEMP == true && aux == 1){
+  Lata.write();
+  TEMP=digitalRead(TP);
+  Serial.println("baixa");
+  delay(500);
   SWITCH = digitalRead(SW);
-  while(SWITCH==true){
-    TEMP= digitalRead(TP);
-    if(TEMP == true){
-      Lata.write(90);
-      delay(300);
-      ledcWriteTone(DC,PWM_FREQ);
-      delay(5000);
-      ledcWrite(DC,0);
-      Lata.write(0);
-      TEMP = digitalRead(TP);
-
-    }
-    else{
-      TEMP=digitalRead(TP);
-      SWITCH = digitalRead(SW);
-    }
-  }  
-
+digitalWwrite(DC, LOW);
+}
+}
+if(SWITCH == false){
+  Serial.println("Sistema desligado");
+  aux =0;
+  SWITCH = digitalRead(SW);
+digitalWwrite(DC, LOW);
+}
 }
