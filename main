@@ -1,5 +1,5 @@
 #include <ESP32Servo.h>
-const int DC=25, TP= 18, SW= 34;
+const int DC=33, TP= 18, SW= 34;
 Servo Lata;
 bool TEMP = false, SWITCH = false;
 int aux=0;
@@ -29,21 +29,21 @@ else if(TEMP == false){
   Serial.println("Alta");
 delay(500);
 SWITCH = digitalRead(SW);
-digitalWwrite(DC, HIGH);
+digitalWrite(DC, HIGH);
 }
 else if(TEMP == true && aux == 1){
-  Lata.write();
+  Lata.write(180);
   TEMP=digitalRead(TP);
   Serial.println("baixa");
   delay(500);
   SWITCH = digitalRead(SW);
-digitalWwrite(DC, LOW);
+digitalWrite(DC, LOW);
 }
 }
 if(SWITCH == false){
   Serial.println("Sistema desligado");
   aux =0;
   SWITCH = digitalRead(SW);
-digitalWwrite(DC, LOW);
+digitalWrite(DC, LOW);
 }
 }
