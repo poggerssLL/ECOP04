@@ -1,0 +1,13 @@
+import array
+import numpy
+num = 1
+teste = [None]*3[None]*3
+for row in range(3):
+    for column in range(3):
+        teste[row][column]=num
+        num +=1
+        
+for row in range(3):
+    for column in range(3):
+        print(teste[row][column], end = " ")
+    print()
