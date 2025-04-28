@@ -1,1 +1,48 @@
 
+#include "pic18f4520.h"
+#include "config.h"
+
+void main(void) {
+    //configuração do sistema
+    TRISA = 0x00; //configura porta A como saída
+    TRISD = 0x00; //configura porta D como saída
+    TRISE = 0x00; //configura porta E como saída
+    BitClr(INTCON2, 7); //liga pull up
+    ADCON1 = 0x0E; //config AD
+    BitClr(PORTD,0);
+    BitClr(PORTD,1);
+    BitClr(PORTD,2);
+    BitClr(PORTD,3);
+    BitClr(PORTD,4);
+    BitClr(PORTD,5);
+    BitClr(PORTD,6);
+    BitClr(PORTD,7);
+    
+    int j, k,d;
+    for (;;) {
+        BitSet(PORTA, 5); //ativa o 1o display
+        BitSet(PORTA, 2); //ativa o 2o display
+        BitSet(PORTE, 0); //ativa o 3o display
+        BitSet(PORTE, 2); //ativa o 4o display
+        for (int i = 0; i < 8; i++) {
+            BitSet(PORTD, i); //liga o 1o led
+            for (d = 0; d <= 1000; d++){
+            for (j = 0; j < 41; j++) {
+                for (k = 0; k < 3; k++);
+            }
+            }
+        }
+        for (int q = 7; q >= 0; q--) {
+            BitClr(PORTD, q);
+            for (d = 0; d <= 1000; d++){
+            for (j = 0; j < 41; j++) {
+                for (k = 0; k < 3; k++);
+            }
+            }
+        }
+        }
+
+    }
+    //... continua até PORTD,7
+
+
